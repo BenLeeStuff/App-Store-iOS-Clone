@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class AppsSearchController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
@@ -33,8 +34,6 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
                 self.collectionView.reloadData()
             }
         }
-
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -58,8 +57,21 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
 
         cell.ratingsLabel.text = "Rating: \(roundedRating)"
         
-        cell.appIconImageView
-        cell.screenshot1ImageView
+        let url = URL(string: appResult.artworkUrl100)
+        cell.appIconImageView.sd_internalSetImage(with: url, placeholderImage: UIImage(systemName: "person.crop.circle.badge.exclamationmark.fill"), context: nil, setImageBlock: nil, progress: nil)
+        
+        
+        cell.screenshot1ImageView.sd_internalSetImage(with: URL(string: appResult.screenshotUrls[0]), placeholderImage: UIImage(systemName: "person.crop.circle.badge.exclamationmark.fill"), context: nil, setImageBlock: nil, progress: nil)
+        
+
+        if appResult.screenshotUrls.count > 1 {
+            cell.screenshot2ImageView.sd_internalSetImage(with: URL(string: appResult.screenshotUrls[1]), placeholderImage: UIImage(systemName: "person.crop.circle.badge.exclamationmark.fill"), context: nil, setImageBlock: nil, progress: nil)
+        }
+        
+        if appResult.screenshotUrls.count > 2 {
+            cell.screenshot3ImageView.sd_internalSetImage(with: URL(string: appResult.screenshotUrls[2]), placeholderImage: UIImage(systemName: "person.crop.circle.badge.exclamationmark.fill"), context: nil, setImageBlock: nil, progress: nil)
+
+        }
 
         return cell
     }

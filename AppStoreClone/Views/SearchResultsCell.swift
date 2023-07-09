@@ -15,6 +15,7 @@ class SearchResultsCell: UICollectionViewCell {
         iv.widthAnchor.constraint(equalToConstant: 64).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 64).isActive = true
         iv.layer.cornerRadius = 12
+        iv.clipsToBounds = true
         return iv
     }()
     
@@ -55,12 +56,15 @@ class SearchResultsCell: UICollectionViewCell {
     func createScreenshotImageView() -> UIImageView {
         let iv = UIImageView()
         iv.backgroundColor = .blue
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 8
+        iv.layer.borderWidth = 0.5
+        iv.layer.borderColor = UIColor(white: 0.5, alpha: 0.5).cgColor
         return iv
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .yellow
         
         let labelsStackView: UIStackView = VerticalStackView(arrangedSubviews: [nameLabel, categoryLabel, ratingsLabel])
         
