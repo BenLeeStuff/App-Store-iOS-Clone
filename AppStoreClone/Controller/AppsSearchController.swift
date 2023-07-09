@@ -53,10 +53,13 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         cell.nameLabel.text = appResult.trackName
         cell.categoryLabel.text = appResult.primaryGenreName
         
-        var rating = appResult.averageUserRating ?? 0
+        let rating = appResult.averageUserRating ?? 0
         let roundedRating = (rating * 10).rounded() / 10
 
         cell.ratingsLabel.text = "Rating: \(roundedRating)"
+        
+        cell.appIconImageView
+        cell.screenshot1ImageView
 
         return cell
     }
