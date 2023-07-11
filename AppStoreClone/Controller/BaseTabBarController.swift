@@ -5,7 +5,6 @@
 //  Created by Ben Lee on 7/6/23.
 //
 
-import Foundation
 import UIKit
 
 class BaseTabBarController: UITabBarController {
@@ -17,9 +16,9 @@ class BaseTabBarController: UITabBarController {
         tabBar.barTintColor = .white
 
         viewControllers = [
+            createNavController(viewController: AppsController(), title: "Apps", imageName: "apps.iphone"),
             createNavController(viewController: AppsSearchController(), title: "Search", imageName: "magnifyingglass"),
-            createNavController(viewController: UIViewController(), title: "Today", imageName: "doc.text.image"),
-            createNavController(viewController: UIViewController(), title: "Apps", imageName: "apps.iphone")
+            createNavController(viewController: UIViewController(), title: "Today", imageName: "doc.text.image")
         ]
     }
     

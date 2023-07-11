@@ -45,7 +45,7 @@ extension UIView {
         return anchoredConstraints
     }
     
-    func fillSuperview(padding: UIEdgeInsets) {
+    func fillSuperview(padding: UIEdgeInsets = .zero) {
         translatesAutoresizingMaskIntoConstraints = false
         if let superviewTopAnchor = superview?.topAnchor {
             topAnchor.constraint(equalTo: superviewTopAnchor, constant: padding.top).isActive = true
