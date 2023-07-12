@@ -17,8 +17,14 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         collectionView.backgroundColor = .white
         collectionView.register(AppsGroupsCell.self, forCellWithReuseIdentifier: "cellId")
         collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
+    
     }
-   
+    
+    func fetchTopApps() {
+        Service.shared.fetchTopFreeApps { appGroup, error in
+            print("Failed to fetch top apps")
+        }
+    }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath)

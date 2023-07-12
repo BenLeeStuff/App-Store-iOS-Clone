@@ -19,11 +19,8 @@ class Service {
 
             if let error = error {
                 print("Error: Failed to fetch apps. \(error.localizedDescription)")
-
             } else {
-
                 guard let data = data else {return}
-
                 do {
                     let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
                     //self.appResults = searchResult.results
@@ -35,11 +32,32 @@ class Service {
                 } catch let jsonError {
                     print("Error: Failed to decode JSON. \(jsonError.localizedDescription)")
                     completion([], jsonError)
-
                 }
-
             }
 
+        }.resume()
+    }
+    
+    func fetchTopFreeApps(completion: @escaping (AppGroup?, Error?) -> ()) {
+        guard let url = URL(string: "https://rss.applemarketingtools.com/api/v2/us/apps/top-free/25/apps.json") else {return}
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            if let error = error {
+                print("Error: \(error)")
+                completion(nil, error)
+            }
+            
+            do {
+                let appGroup = try JSONDecoder().decode(AppGroup.self, from: data!)
+                completion(appGroup, nil)
+                //appGroup.feed.results.forEach({print($0.name)})
+                
+            } catch let jsonError {
+                print("Error decoding json: \(jsonError)")
+                completion(nil, error)
+            }
+            
         }.resume()
     }
 }
