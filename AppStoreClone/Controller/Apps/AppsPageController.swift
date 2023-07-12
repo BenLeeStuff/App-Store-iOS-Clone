@@ -17,39 +17,48 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         collectionView.backgroundColor = .white
         collectionView.register(AppsGroupsCell.self, forCellWithReuseIdentifier: "cellId")
         collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
-        fetchTopFreeApps()
+        fetchTopApps()
     }
     
-    fileprivate func fetchTopFreeApps() {
+    fileprivate func fetchTopApps() {
+        
+        var group1: AppGroup?
+        var group2: AppGroup?
+       // var group3 = AppGroup?
+
+        // dispatch group to help sync data fetches
+        let dispatchGroup = DispatchGroup()
+    
+        dispatchGroup.enter()
         Service.shared.fetchTopFreeApps { appGroup, error in
-            if let error = error {
-                print("Failed to fetch top free apps", error)
-                return
-            }
-            self.topFreeApps = appGroup
-            if let group = appGroup {
-                self.groups.append(group)
-            }
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+            print("Done With Top Free Apps")
+            dispatchGroup.leave()
+            group1 = appGroup
         }
         
+        dispatchGroup.enter()
         Service.shared.fetchTopPaidApps { appGroup, error in
-            if let error = error {
-                print("Failed to fetch top paid apps", error)
-                return
-            }
-            self.topFreeApps = appGroup
-            if let group = appGroup {
+            print("Done With Top Paid Apps")
+            dispatchGroup.leave()
+            group2 = appGroup
+        }
+        
+        //completion of the dispatch group. here is when the action is on the main thread
+        dispatchGroup.notify(queue: .main) {
+            print("Completed dispatch group task")
+            
+            if let group = group1 {
                 self.groups.append(group)
             }
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+            if let group = group2 {
+                self.groups.append(group)
             }
+            self.collectionView.reloadData()
         }
+        
+        
+        
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -58,7 +67,7 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         return header
     }
     
-    var topFreeApps: AppGroup?
+    var topApps: AppGroup?
     var groups: [AppGroup] = []
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -76,7 +85,7 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 0)
+        return .init(width: view.frame.width, height: 300)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
